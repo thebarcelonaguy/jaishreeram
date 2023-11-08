@@ -1,0 +1,292 @@
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+<div class="container mt-5 text-white bg-dark">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class=" mb-4 mt-4">Product Search</h2>
+            <form #searchForm="ngForm" (ngSubmit)="onSubmit(searchForm.value)">
+
+                <!-- Keyword Field -->
+                <div class="form-group row mt-3 mb-3">
+                    <label for="keyword" class="col-sm-3 col-form-label">Keyword<span class="highlight">*</span></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control w-50" id="keyword" name="keyword" required
+                            placeholder="Enter Product Name (eg. iPhone 8)" ngModel>
+
+                    </div>
+                </div>
+
+                <!-- Category Dropdown -->
+                <div class="form-group row mt-3 mb-3">
+                    <label for="category" class="col-sm-3 col-form-label">Category</label>
+                    <div class="col-sm-9">
+                        <select class="form-select w-25" id="category" name="category" ngModel>
+                            <option value="" disabled hidden selected class="placeholder-option">All Catego</option>
+                            <option value="All Categories" selected>All Categories</option>
+                            <option value="Art">Art</option>
+                            <option value="Baby">Baby</option>
+                            <option value="Books">Books</option>
+                            <option value="Clothing, Shoes & Accessories">Clothing, Shoes & Accessories</option>
+                            <option value="Computers/Tablets & Networkings">Computers/Tablets & Networkings</option>
+                            <option value="Health & Beauty">Health & Beauty</option>
+                            <option value="Music">Music</option>
+                            <option value="Video Games & Consoles">Video Games & Consoles</option>
+
+
+                            <!-- ... Other categories can be added here ... -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Condition -->
+                <div class="form-group row mt-3 mb-3">
+                    <label class="col-sm-3 col-form-label">Condition</label>
+                    <div class="col-sm-9">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="new" name="condition" value="new"
+                                ngModel>
+                            <label class="form-check-label" for="new">New</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="used" name="condition" value="used"
+                                ngModel>
+                            <label class="form-check-label" for="used">Used</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="unspecified" name="condition"
+                                value="unspecified" ngModel>
+                            <label class="form-check-label" for="unspecified">Unspecified</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Options -->
+                <div class="form-group row mt-3 mb-3">
+                    <label class="col-sm-3 col-form-label">Shipping Options</label>
+                    <div class="col-sm-9">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="localPickup" name="shipping"
+                                value="localPickup" ngModel>
+                            <label class="form-check-label" for="localPickup">Local Pickup</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="freeShipping" name="shipping"
+                                value="freeShipping" ngModel>
+                            <label class="form-check-label" for="freeShipping">Free Shipping</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distance -->
+                <div class="form-group row mt-3 mb-3">
+                    <label for="distance" class="col-sm-3 col-form-label ">Distance (Miles)</label>
+                    <div class="col-sm-9">
+                        <input type="number" class="form-control w-25" id="distance" name="distance" placeholder="10"
+                            ngModel>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-3 mb-3">
+                    <label class="col-sm-3 col-form-label">From<span class="highlight">*</span></label>
+                    <div class="col-sm-9">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="locationChoice"
+                                [(ngModel)]="locationChoice" value="currentLocation" id="currentLocation"
+                                (change)="onLocationChange()">
+
+                            <label class="form-check-label" for="currentLocation">
+                                Current Location
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="locationChoice"
+                                [(ngModel)]="locationChoice" value="zipCode" id="zipCodeChoice">
+                            <label class="form-check-label" for="zipCodeChoice">
+                                Other: Please specify zip<br>code:
+                            </label>
+                            <!-- <input type="text" class="form-control w-50" [(ngModel)]="zipCode" name="zipCode" id="zipCodeInput" [disabled]="locationChoice !== 'zipCode'"> -->
+                        </div>
+                        <input type="text" class="form-control w-50" [formControl]="zipCodeControl"
+                            [matAutocomplete]="auto" [disabled]="locationChoice !== 'zipCode'">
+
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let zipCode of filteredZipCodes | async" [value]="zipCode">
+                                {{ zipCode }}
+                            </mat-option>
+                        </mat-autocomplete>
+
+
+                    </div>
+                </div>
+
+                <!-- Search & Clear Buttons -->
+                <div class="form-group row mt-3 mb-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-light button-submit" [disabled]="!searchForm.valid"
+                                (click)="onSubmit(searchForm.value)">
+                                <span class="material-symbols-outlined">
+                                    search
+                                </span>
+                                Search
+                            </button>
+                            <button type="button" class="btn btn-light" (click)="searchForm.reset()">
+                                <span class="material-symbols-outlined">
+                                    clear_all
+                                </span>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 d-flex justify-content-center align-items-center">
+    <button type="submit" class="btn btn-light d-inline-block mr-5">Results</button>
+    <button type="button" class="btn btn-light d-inline-block" (click)="searchForm.reset()">Wishlist</button>
+
+</div>
+
+<!-- Only display the table if there are products to show -->
+<div class="container mt-5" *ngIf="products.length > 0 && !selectedItem">
+    <div class="row">
+        <div class="col">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Shipping</th>
+                        <th scope="col">Zip</th>
+                        <th scope="col">Wish List</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products; let i = index" (click)="selectProduct(product.itemId)">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>
+                            <img *ngIf="product.imageUrl !== 'N/A'" [src]="product.imageUrl" alt="Product Image"
+                                style="width:50px;height:auto;">
+                            <span *ngIf="product.imageUrl === 'N/A'">No Image</span>
+                        </td>
+                        <td>{{ product.title }}</td>
+                        <td>{{ product.price | currency }}</td>
+                        <td>{{ product.shipping }}</td>
+                        <td>{{ product.zip }}</td>
+                        <td>
+                            <button type="button" class="btn btn-light"
+                                (click)="toggleWishlist(product); $event.stopPropagation();">
+                                <span class="material-symbols-outlined" [class.active]="product.wishlist">
+                                    add_shopping_cart
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Only display the item details section if selectedItem is set -->
+<!-- Only display the item details section if selectedItem is set -->
+<div *ngIf="selectedItem" class="container mt-3">
+
+    <div class="card">
+        <div class="card-header">
+            Item Details
+        </div>
+        <div class="card-body">
+            <!-- Begin Tab Structure -->
+            <ul class="nav nav-tabs" id="itemDetailsTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="selectedTab === 'info'" id="info-tab"
+                        (click)="showInfo()">Info</a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="photos-tab" href="#photos" role="tab" aria-controls="photos"
+                        aria-selected="false">Photos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="shipping-tab" href="#shipping" role="tab" aria-controls="shipping"
+                        aria-selected="false">Shipping</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="seller-tab" [class.active]="selectedTab === 'seller'" role="tab"
+                        aria-controls="seller" aria-selected="false" (click)="showSellerInfo()">Seller</a>
+
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="similar-tab" href="#similar" role="tab" aria-controls="similar"
+                        aria-selected="false">Similar Products</a>
+                </li>
+            </ul>
+            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab"
+                *ngIf="selectedTab === 'info'">
+                <h5 class=" card-title">{{ selectedItem?.Title }}</h5>
+                <p class="card-text">Some more details about the item...</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let specific of selectedItem.ItemSpecifics.NameValueList">
+                        <strong>{{ specific.Name }}:</strong> {{ specific.Value }}
+                    </li>
+                </ul>
+            </div>
+            <!-- Photos Tab Pane -->
+            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                <!-- Content for Photos tab -->
+            </div>
+            <!-- Shipping Tab Pane -->
+            <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+                <!-- Content for Shipping tab -->
+            </div>
+
+
+            <!-- Seller Tab Pane -->
+            <div class="tab-pane fade" id="seller" role="tabpanel" aria-labelledby="seller-tab"
+                *ngIf="selectedTab === 'seller'">
+                <div>Debug - Selected Tab: {{ selectedTab }}</div>
+                <div>Debug - Seller Details: {{ sellerDetails | json }}</div>
+
+                <!-- Content for Seller tab -->
+                <div *ngIf=" sellerDetails" class="container mt-3">
+                    <div class="container">
+                        <div>Debug - Selected Tab: {{ selectedTab }}</div>
+                        <div>Debug - Seller Details: {{ sellerDetails | json }}</div>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Username:</strong> {{ sellerDetails?.storeName }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Feedback Score:</strong> {{ sellerDetails?.FeedbackScore }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Positive Feedback Percent:</strong> {{ sellerDetails?.positiveFeedbackPercent }}%
+                        </li>
+                        <li class="list-group-item" *ngIf="sellerDetails.storeName">
+                            <strong>Store Name:</strong> <a [href]="sellerDetails.storeURL" target="_blank">{{
+                                sellerDetails.storeName }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Similar Products Tab Pane -->
+            <div class="tab-pane fade" id="similar" role="tabpanel" aria-labelledby="similar-tab">
+                <!-- Content for Similar Products tab -->
+            </div>
+        </div>
+        <!-- End Tab Structure -->
+
+        <!-- Optionally, add a close or back button -->
+        <button type="button" class="btn btn-secondary" (click)="selectedItem = null">Close Details</button>
+    </div>
+</div>

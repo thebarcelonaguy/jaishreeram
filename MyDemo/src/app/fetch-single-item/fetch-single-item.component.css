@@ -1,0 +1,14 @@
+.img-thumbnail {
+    border: 4px solid #000; 
+}
+
+.img-border {
+    border: 5px solid #000; 
+}
+
+.img-small {
+    width: 300px; 
+   
+  }
+
+  

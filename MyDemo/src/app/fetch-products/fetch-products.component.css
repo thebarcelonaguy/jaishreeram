@@ -1,0 +1,20 @@
+.highlight {
+    color: red;
+}
+
+.material-symbols-outlined {
+    vertical-align: middle;
+}
+
+.button-submit {
+    margin-right: 3.5px;
+}
+
+.padding th,
+.padding td {
+  padding: 20px; /* or any other value you prefer */
+}
+
+.placeholder-option {
+    color: lightgrey;
+}
